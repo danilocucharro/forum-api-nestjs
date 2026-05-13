@@ -1,5 +1,5 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common'
-import { PrismaClient } from '../../prisma/generated/prisma/client.js'
+import { PrismaClient } from '../../../prisma/generated/prisma/client.js'
 import { ConfigService } from '@nestjs/config'
 import { Env } from '../env.js'
 import { PrismaPg } from '@prisma/adapter-pg'
@@ -11,10 +11,11 @@ export class PrismaService
 {
   constructor(config: ConfigService<Env, true>) {
     const databaseURL = new URL(config.get('DATABASE_URL', { infer: true }))
+    const schema = databaseURL.searchParams.get('schema')
 
     const adapter = new PrismaPg(
       { connectionString: databaseURL.toString() },
-      { schema: 'public' },
+      { schema: schema || 'public' },
     )
     super({
       adapter,
