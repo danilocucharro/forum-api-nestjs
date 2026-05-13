@@ -1,19 +1,19 @@
-import { PrismaClient } from "../prisma/generated/prisma/client.js";
-import { randomUUID } from "node:crypto";
+import { PrismaClient } from '../prisma/generated/prisma/client.js'
+import { randomUUID } from 'node:crypto'
 import 'dotenv/config'
-import { execSync } from "node:child_process";
-import { PrismaPg } from "@prisma/adapter-pg";
+import { execSync } from 'node:child_process'
+import { PrismaPg } from '@prisma/adapter-pg'
 
 const schemaId = randomUUID()
 
 const adapter = new PrismaPg(
   { connectionString: process.env.DATABASE_URL!.toString() },
-  { schema: schemaId }
+  { schema: schemaId },
 )
 console.log(process.env.DATABASE_URL?.toString())
 
 const prisma = new PrismaClient({
-  adapter
+  adapter,
 })
 
 function generateUniqueDatabaseUrl(schemaId: string) {

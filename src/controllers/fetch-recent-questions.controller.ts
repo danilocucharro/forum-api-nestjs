@@ -1,15 +1,15 @@
-import {
-  Controller,
-  Get,
-  Query,
-  UseGuards,
-} from '@nestjs/common'
+import { Controller, Get, Query, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe.js'
 import { PrismaService } from '../prisma/prisma.service.js'
 import z from 'zod'
 
-const pageQueryParamSchema = z.string().optional().default('1').transform(Number).pipe(z.number().min(1))
+const pageQueryParamSchema = z
+  .string()
+  .optional()
+  .default('1')
+  .transform(Number)
+  .pipe(z.number().min(1))
 const queryValidationPipe = new ZodValidationPipe(pageQueryParamSchema)
 
 type PageQueryParamSchema = z.infer<typeof pageQueryParamSchema>
@@ -27,8 +27,8 @@ export class FetchRecentQuestionsController {
       take: perPage,
       skip: (page - 1) * 1,
       orderBy: {
-        createdAt: 'desc'
-      }
+        createdAt: 'desc',
+      },
     })
 
     return { questions }

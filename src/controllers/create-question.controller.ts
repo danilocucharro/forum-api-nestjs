@@ -1,9 +1,4 @@
-import {
-  Body,
-  Controller,
-  Post,
-  UseGuards,
-} from '@nestjs/common'
+import { Body, Controller, Post, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { CurrentUser } from '../auth/current-user-decorator.js'
 import type { UserPayload } from '../auth/jwt.strategy.js'
@@ -28,7 +23,7 @@ export class CreateQuestionController {
   @Post()
   async handle(
     @Body(bodyValidationPipe) body: CreateQuestionBodySchema,
-    @CurrentUser() user: UserPayload
+    @CurrentUser() user: UserPayload,
   ) {
     const { content, title } = body
     const userId = user.sub
@@ -40,12 +35,12 @@ export class CreateQuestionController {
         authorId: userId,
         title,
         content,
-        slug
-      }
+        slug,
+      },
     })
   }
 
-  private convertToSlug(title: string): string{
+  private convertToSlug(title: string): string {
     return title
       .toLowerCase()
       .normalize('NFD')

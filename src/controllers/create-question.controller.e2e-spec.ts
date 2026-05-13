@@ -1,10 +1,9 @@
-import { INestApplication } from "@nestjs/common"
-import { Test } from "@nestjs/testing"
-import { AppModule } from "../app.module.js"
-import { PrismaService } from "../prisma/prisma.service.js"
-import request from "supertest"
-import { hash } from "bcryptjs"
-import { JwtService } from "@nestjs/jwt"
+import { INestApplication } from '@nestjs/common'
+import { Test } from '@nestjs/testing'
+import { AppModule } from '../app.module.js'
+import { PrismaService } from '../prisma/prisma.service.js'
+import request from 'supertest'
+import { JwtService } from '@nestjs/jwt'
 
 describe('Create Question (E2E)', () => {
   let app: INestApplication
@@ -29,8 +28,8 @@ describe('Create Question (E2E)', () => {
       data: {
         name: 'Maria Doe',
         email: 'maria@email.com',
-        password: 'maria123'
-      }
+        password: 'maria123',
+      },
     })
 
     const accessToken = jwt.sign({ sub: user.id })
@@ -39,14 +38,14 @@ describe('Create Question (E2E)', () => {
       .post('/questions')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        title: "Nova question teste1",
-        content: "Conteudo da nova question teste"
+        title: 'Nova question teste1',
+        content: 'Conteudo da nova question teste',
       })
 
     expect(response.statusCode).toBe(201)
 
     const questionOnDataBase = await prisma.question.findFirst({
-      where: { title: "Nova question teste1" }
+      where: { title: 'Nova question teste1' },
     })
 
     expect(questionOnDataBase).toBeTruthy()
