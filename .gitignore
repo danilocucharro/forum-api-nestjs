@@ -63,3 +63,6 @@ data
 # JWT
 private_key.pem
 public_key.pem
+
+# PRISMA
+prisma/generated

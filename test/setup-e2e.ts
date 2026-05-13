@@ -1,9 +1,20 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../prisma/generated/prisma/client.js";
 import { randomUUID } from "node:crypto";
 import 'dotenv/config'
 import { execSync } from "node:child_process";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-const prisma = new PrismaClient()
+const schemaId = randomUUID()
+
+const adapter = new PrismaPg(
+  { connectionString: process.env.DATABASE_URL!.toString() },
+  { schema: schemaId }
+)
+console.log(process.env.DATABASE_URL?.toString())
+
+const prisma = new PrismaClient({
+  adapter
+})
 
 function generateUniqueDatabaseUrl(schemaId: string) {
   if (!process.env.DATABASE_URL) {
@@ -16,8 +27,6 @@ function generateUniqueDatabaseUrl(schemaId: string) {
 
   return url
 }
-
-const schemaId = randomUUID()
 
 beforeAll(async () => {
   const databaseURL = generateUniqueDatabaseUrl(schemaId)
