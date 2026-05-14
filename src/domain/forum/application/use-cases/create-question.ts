@@ -27,7 +27,7 @@ export class CreateQuestionUseCase {
       authorId: new UniqueEntityId(authorId),
       title,
       content,
-      bestAnswerId: undefined,
+      bestAnswerId: null,
     })
 
     const questionAttachments = attachmentsIds.map((attachmentId) => {
