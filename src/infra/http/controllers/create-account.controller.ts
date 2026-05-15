@@ -1,5 +1,7 @@
 import {
+  BadRequestException,
   Body,
+  ConflictException,
   Controller,
   HttpCode,
   Post,
@@ -7,6 +9,7 @@ import {
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe.js'
 import { z } from 'zod'
 import { RegisterStudentUseCase } from '../../../domain/forum/application/use-cases/register-student.js'
+import { StudentAlreadyExistsError } from '../../../domain/forum/application/use-cases/errors/student-already-exists-error.js'
 
 const createAccountBodySchema = z.object({
   name: z.string(),
@@ -34,7 +37,14 @@ export class CreateAccountController {
     })
 
     if (result.isLeft()) {
-      throw Error()
+      const error = result.value
+
+      switch (error.constructor) {
+        case StudentAlreadyExistsError:
+          throw new ConflictException(error.message)
+        default:
+        throw new BadRequestException(error.message)
+      }
     }
   }
 }
