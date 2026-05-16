@@ -10,6 +10,7 @@ import { ZodValidationPipe } from '../pipes/zod-validation-pipe.js'
 import { z } from 'zod'
 import { RegisterStudentUseCase } from '../../../domain/forum/application/use-cases/register-student.js'
 import { StudentAlreadyExistsError } from '../../../domain/forum/application/use-cases/errors/student-already-exists-error.js'
+import { Public } from '../../../infra/auth/public.js'
 
 const createAccountBodySchema = z.object({
   name: z.string(),
@@ -22,6 +23,7 @@ const bodyValidationPipe = new ZodValidationPipe(createAccountBodySchema)
 type CreateAccountBodySchema = z.infer<typeof createAccountBodySchema>
 
 @Controller('/accounts')
+@Public()
 export class CreateAccountController {
   constructor(private registerStudent: RegisterStudentUseCase) {}
 
